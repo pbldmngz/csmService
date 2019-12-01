@@ -1,0 +1,247 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="csmModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="8.0" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="acceso">
+    <Key>
+      <PropertyRef Name="id_acceso" />
+    </Key>
+    <Property Name="id_acceso" Type="int" Nullable="false" />
+    <Property Name="cargo" Type="varchar" MaxLength="45" Nullable="false" />
+  </EntityType>
+  <EntityType Name="alumno">
+    <Key>
+      <PropertyRef Name="id_alumno" />
+    </Key>
+    <Property Name="id_alumno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="correo" Type="varchar" MaxLength="45" Nullable="false" />
+    <Property Name="id_grupo" Type="varchar" MaxLength="45" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="45" Nullable="false" />
+    <Property Name="primer_apellido" Type="varchar" MaxLength="45" Nullable="false" />
+    <Property Name="segundo_apellido" Type="varchar" MaxLength="45" Nullable="false" />
+  </EntityType>
+  <EntityType Name="login">
+    <Key>
+      <PropertyRef Name="correo" />
+    </Key>
+    <Property Name="correo" Type="varchar" MaxLength="45" Nullable="false" />
+    <Property Name="clave" Type="varchar" MaxLength="45" Nullable="false" />
+    <Property Name="id_acceso" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="materia">
+    <Key>
+      <PropertyRef Name="id_materia" />
+    </Key>
+    <Property Name="id_materia" Type="int" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="45" Nullable="false" />
+  </EntityType>
+  <EntityType Name="materia_alumno">
+    <Key>
+      <PropertyRef Name="id_materia" />
+      <PropertyRef Name="id_alumno" />
+    </Key>
+    <Property Name="id_materia" Type="int" Nullable="false" />
+    <Property Name="id_alumno" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="materia_profesor">
+    <Key>
+      <PropertyRef Name="id_materia" />
+      <PropertyRef Name="id_empleado" />
+    </Key>
+    <Property Name="id_materia" Type="int" Nullable="false" />
+    <Property Name="id_empleado" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="notificacion">
+    <Key>
+      <PropertyRef Name="id_notificacion" />
+    </Key>
+    <Property Name="id_notificacion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="contenido" Type="varchar" MaxLength="1000" Nullable="false" />
+    <Property Name="id_emisor" Type="int" Nullable="false" />
+    <Property Name="id_receptor" Type="int" Nullable="false" />
+    <Property Name="fecha" Type="timestamp" Precision="0" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
+  <EntityType Name="profesor">
+    <Key>
+      <PropertyRef Name="id_empleado" />
+    </Key>
+    <Property Name="id_empleado" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="correo" Type="varchar" MaxLength="45" Nullable="false" />
+    <Property Name="telefono" Type="varchar" MaxLength="45" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="45" Nullable="false" />
+    <Property Name="primer_apellido" Type="varchar" MaxLength="45" Nullable="false" />
+    <Property Name="segundo_apellido" Type="varchar" MaxLength="45" Nullable="false" />
+  </EntityType>
+  <Association Name="correo">
+    <End Role="login" Type="Self.login" Multiplicity="1" />
+    <End Role="profesor" Type="Self.profesor" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="login">
+        <PropertyRef Name="correo" />
+      </Principal>
+      <Dependent Role="profesor">
+        <PropertyRef Name="correo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="id_acceso">
+    <End Role="acceso" Type="Self.acceso" Multiplicity="1" />
+    <End Role="login" Type="Self.login" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="acceso">
+        <PropertyRef Name="id_acceso" />
+      </Principal>
+      <Dependent Role="login">
+        <PropertyRef Name="id_acceso" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="id_emisor">
+    <End Role="profesor" Type="Self.profesor" Multiplicity="1" />
+    <End Role="notificacion" Type="Self.notificacion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="profesor">
+        <PropertyRef Name="id_empleado" />
+      </Principal>
+      <Dependent Role="notificacion">
+        <PropertyRef Name="id_emisor" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="id_empleado">
+    <End Role="profesor" Type="Self.profesor" Multiplicity="1" />
+    <End Role="materia_profesor" Type="Self.materia_profesor" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="profesor">
+        <PropertyRef Name="id_empleado" />
+      </Principal>
+      <Dependent Role="materia_profesor">
+        <PropertyRef Name="id_empleado" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="id_materia">
+    <End Role="materia" Type="Self.materia" Multiplicity="1" />
+    <End Role="materia_profesor" Type="Self.materia_profesor" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="materia">
+        <PropertyRef Name="id_materia" />
+      </Principal>
+      <Dependent Role="materia_profesor">
+        <PropertyRef Name="id_materia" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="id_materia_idx2">
+    <End Role="alumno" Type="Self.alumno" Multiplicity="1" />
+    <End Role="materia_alumno" Type="Self.materia_alumno" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="alumno">
+        <PropertyRef Name="id_alumno" />
+      </Principal>
+      <Dependent Role="materia_alumno">
+        <PropertyRef Name="id_alumno" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="id_materia_idx3">
+    <End Role="materia" Type="Self.materia" Multiplicity="1" />
+    <End Role="materia_alumno" Type="Self.materia_alumno" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="materia">
+        <PropertyRef Name="id_materia" />
+      </Principal>
+      <Dependent Role="materia_alumno">
+        <PropertyRef Name="id_materia" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="id_receptor">
+    <End Role="profesor" Type="Self.profesor" Multiplicity="1" />
+    <End Role="notificacion" Type="Self.notificacion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="profesor">
+        <PropertyRef Name="id_empleado" />
+      </Principal>
+      <Dependent Role="notificacion">
+        <PropertyRef Name="id_receptor" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="antiguedad_cliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="csm_database">
+    <Parameter Name="id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="buzon" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="csm_database">
+    <Parameter Name="id" Type="int" Mode="In" />
+    <Parameter Name="tamano" Type="int" Mode="In" />
+    <Parameter Name="pagina" Type="int" Mode="In" />
+  </Function>
+  <Function Name="cambiar_password" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="csm_database">
+    <Parameter Name="c" Type="varchar" Mode="In" />
+    <Parameter Name="p" Type="varchar" Mode="In" />
+    <Parameter Name="p2" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="crear_mensaje" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="csm_database">
+    <Parameter Name="emisor" Type="int" Mode="In" />
+    <Parameter Name="receptor" Type="int" Mode="In" />
+    <Parameter Name="mensaje" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="group_students" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="csm_database">
+    <Parameter Name="id_profesor" Type="int" Mode="In" />
+  </Function>
+  <Function Name="login1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="csm_database" StoreFunctionName="login">
+    <Parameter Name="c" Type="varchar" Mode="In" />
+    <Parameter Name="p" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="paginado" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="csm_database">
+    <Parameter Name="tamano" Type="int" Mode="In" />
+    <Parameter Name="numero" Type="int" Mode="In" />
+    <Parameter Name="alumno" Type="tinyint" Mode="In" />
+  </Function>
+  <Function Name="profesor_alumnos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="csm_database">
+    <Parameter Name="id_profesor" Type="int" Mode="In" />
+    <Parameter Name="numero" Type="int" Mode="In" />
+    <Parameter Name="tamano" Type="int" Mode="In" />
+  </Function>
+  <Function Name="test" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="csm_database" />
+  <EntityContainer Name="csmModelStoreContainer">
+    <EntitySet Name="acceso" EntityType="Self.acceso" Schema="csm_database" store:Type="Tables" />
+    <EntitySet Name="alumno" EntityType="Self.alumno" Schema="csm_database" store:Type="Tables" />
+    <EntitySet Name="login" EntityType="Self.login" Schema="csm_database" store:Type="Tables" />
+    <EntitySet Name="materia" EntityType="Self.materia" Schema="csm_database" store:Type="Tables" />
+    <EntitySet Name="materia_alumno" EntityType="Self.materia_alumno" Schema="csm_database" store:Type="Tables" />
+    <EntitySet Name="materia_profesor" EntityType="Self.materia_profesor" Schema="csm_database" store:Type="Tables" />
+    <EntitySet Name="notificacion" EntityType="Self.notificacion" Schema="csm_database" store:Type="Tables" />
+    <EntitySet Name="profesor" EntityType="Self.profesor" Schema="csm_database" store:Type="Tables" />
+    <AssociationSet Name="correo" Association="Self.correo">
+      <End Role="login" EntitySet="login" />
+      <End Role="profesor" EntitySet="profesor" />
+    </AssociationSet>
+    <AssociationSet Name="id_acceso" Association="Self.id_acceso">
+      <End Role="acceso" EntitySet="acceso" />
+      <End Role="login" EntitySet="login" />
+    </AssociationSet>
+    <AssociationSet Name="id_emisor" Association="Self.id_emisor">
+      <End Role="profesor" EntitySet="profesor" />
+      <End Role="notificacion" EntitySet="notificacion" />
+    </AssociationSet>
+    <AssociationSet Name="id_empleado" Association="Self.id_empleado">
+      <End Role="profesor" EntitySet="profesor" />
+      <End Role="materia_profesor" EntitySet="materia_profesor" />
+    </AssociationSet>
+    <AssociationSet Name="id_materia" Association="Self.id_materia">
+      <End Role="materia" EntitySet="materia" />
+      <End Role="materia_profesor" EntitySet="materia_profesor" />
+    </AssociationSet>
+    <AssociationSet Name="id_materia_idx2" Association="Self.id_materia_idx2">
+      <End Role="alumno" EntitySet="alumno" />
+      <End Role="materia_alumno" EntitySet="materia_alumno" />
+    </AssociationSet>
+    <AssociationSet Name="id_materia_idx3" Association="Self.id_materia_idx3">
+      <End Role="materia" EntitySet="materia" />
+      <End Role="materia_alumno" EntitySet="materia_alumno" />
+    </AssociationSet>
+    <AssociationSet Name="id_receptor" Association="Self.id_receptor">
+      <End Role="profesor" EntitySet="profesor" />
+      <End Role="notificacion" EntitySet="notificacion" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

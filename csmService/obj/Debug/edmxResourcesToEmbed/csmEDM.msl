@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="csmModelStoreContainer" CdmEntityContainer="csmEntities">
+    <EntitySetMapping Name="accesoes">
+      <EntityTypeMapping TypeName="csmModel.acceso">
+        <MappingFragment StoreEntitySet="acceso">
+          <ScalarProperty Name="id_acceso" ColumnName="id_acceso" />
+          <ScalarProperty Name="cargo" ColumnName="cargo" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="alumnoes">
+      <EntityTypeMapping TypeName="csmModel.alumno">
+        <MappingFragment StoreEntitySet="alumno">
+          <ScalarProperty Name="id_alumno" ColumnName="id_alumno" />
+          <ScalarProperty Name="correo" ColumnName="correo" />
+          <ScalarProperty Name="nombre" ColumnName="nombre" />
+          <ScalarProperty Name="primer_apellido" ColumnName="primer_apellido" />
+          <ScalarProperty Name="segundo_apellido" ColumnName="segundo_apellido" />
+          <ScalarProperty Name="id_grupo" ColumnName="id_grupo" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="logins">
+      <EntityTypeMapping TypeName="csmModel.login">
+        <MappingFragment StoreEntitySet="login">
+          <ScalarProperty Name="correo" ColumnName="correo" />
+          <ScalarProperty Name="clave" ColumnName="clave" />
+          <ScalarProperty Name="id_acceso" ColumnName="id_acceso" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="materias">
+      <EntityTypeMapping TypeName="csmModel.materia">
+        <MappingFragment StoreEntitySet="materia">
+          <ScalarProperty Name="id_materia" ColumnName="id_materia" />
+          <ScalarProperty Name="nombre" ColumnName="nombre" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="notificacions">
+      <EntityTypeMapping TypeName="csmModel.notificacion">
+        <MappingFragment StoreEntitySet="notificacion">
+          <ScalarProperty Name="id_notificacion" ColumnName="id_notificacion" />
+          <ScalarProperty Name="contenido" ColumnName="contenido" />
+          <ScalarProperty Name="id_emisor" ColumnName="id_emisor" />
+          <ScalarProperty Name="id_receptor" ColumnName="id_receptor" />
+          <ScalarProperty Name="fecha" ColumnName="fecha" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="profesors">
+      <EntityTypeMapping TypeName="csmModel.profesor">
+        <MappingFragment StoreEntitySet="profesor">
+          <ScalarProperty Name="id_empleado" ColumnName="id_empleado" />
+          <ScalarProperty Name="correo" ColumnName="correo" />
+          <ScalarProperty Name="telefono" ColumnName="telefono" />
+          <ScalarProperty Name="nombre" ColumnName="nombre" />
+          <ScalarProperty Name="primer_apellido" ColumnName="primer_apellido" />
+          <ScalarProperty Name="segundo_apellido" ColumnName="segundo_apellido" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="materia_alumno" TypeName="csmModel.materia_alumno" StoreEntitySet="materia_alumno">
+      <EndProperty Name="alumno">
+        <ScalarProperty Name="id_alumno" ColumnName="id_alumno" />
+      </EndProperty>
+      <EndProperty Name="materia">
+        <ScalarProperty Name="id_materia" ColumnName="id_materia" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="materia_profesor" TypeName="csmModel.materia_profesor" StoreEntitySet="materia_profesor">
+      <EndProperty Name="profesor">
+        <ScalarProperty Name="id_empleado" ColumnName="id_empleado" />
+      </EndProperty>
+      <EndProperty Name="materia">
+        <ScalarProperty Name="id_materia" ColumnName="id_materia" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <FunctionImportMapping FunctionImportName="antiguedad_cliente" FunctionName="csmModel.Store.antiguedad_cliente" />
+    <FunctionImportMapping FunctionImportName="paginado" FunctionName="csmModel.Store.paginado">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="csmModel.paginado_Result" />
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="profesor_alumnos" FunctionName="csmModel.Store.profesor_alumnos">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="csmModel.profesor_alumnos_Result" />
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="buzon" FunctionName="csmModel.Store.buzon">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="csmModel.buzon_Result" />
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="crear_mensaje" FunctionName="csmModel.Store.crear_mensaje" />
+    <FunctionImportMapping FunctionImportName="group_students" FunctionName="csmModel.Store.group_students">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="csmModel.group_students_Result" />
+      </ResultMapping>
+    </FunctionImportMapping>
+  </EntityContainerMapping>
+</Mapping>

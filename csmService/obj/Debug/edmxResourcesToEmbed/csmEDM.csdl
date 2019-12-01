@@ -1,0 +1,187 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="csmModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="acceso">
+    <Key>
+      <PropertyRef Name="id_acceso" />
+    </Key>
+    <Property Name="id_acceso" Type="Int32" Nullable="false" />
+    <Property Name="cargo" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="logins" Relationship="Self.id_acceso" FromRole="acceso" ToRole="login" />
+  </EntityType>
+  <EntityType Name="alumno">
+    <Key>
+      <PropertyRef Name="id_alumno" />
+    </Key>
+    <Property Name="id_alumno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="correo" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="nombre" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="primer_apellido" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="segundo_apellido" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="id_grupo" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="materias" Relationship="Self.materia_alumno" FromRole="alumno" ToRole="materia" />
+  </EntityType>
+  <EntityType Name="login">
+    <Key>
+      <PropertyRef Name="correo" />
+    </Key>
+    <Property Name="correo" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="clave" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="id_acceso" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="acceso" Relationship="Self.id_acceso" FromRole="login" ToRole="acceso" />
+    <NavigationProperty Name="profesors" Relationship="Self.correo" FromRole="login" ToRole="profesor" />
+  </EntityType>
+  <EntityType Name="materia">
+    <Key>
+      <PropertyRef Name="id_materia" />
+    </Key>
+    <Property Name="id_materia" Type="Int32" Nullable="false" />
+    <Property Name="nombre" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="alumnoes" Relationship="Self.materia_alumno" FromRole="materia" ToRole="alumno" />
+    <NavigationProperty Name="profesors" Relationship="Self.materia_profesor" FromRole="materia" ToRole="profesor" />
+  </EntityType>
+  <EntityType Name="notificacion">
+    <Key>
+      <PropertyRef Name="id_notificacion" />
+    </Key>
+    <Property Name="id_notificacion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="contenido" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="id_emisor" Type="Int32" Nullable="false" />
+    <Property Name="id_receptor" Type="Int32" Nullable="false" />
+    <Property Name="fecha" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <NavigationProperty Name="profesor" Relationship="Self.id_emisor" FromRole="notificacion" ToRole="profesor" />
+    <NavigationProperty Name="profesor1" Relationship="Self.id_receptor" FromRole="notificacion" ToRole="profesor" />
+  </EntityType>
+  <EntityType Name="profesor">
+    <Key>
+      <PropertyRef Name="id_empleado" />
+    </Key>
+    <Property Name="id_empleado" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="correo" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="telefono" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="nombre" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="primer_apellido" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="segundo_apellido" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="login" Relationship="Self.correo" FromRole="profesor" ToRole="login" />
+    <NavigationProperty Name="notificacions" Relationship="Self.id_emisor" FromRole="profesor" ToRole="notificacion" />
+    <NavigationProperty Name="notificacions1" Relationship="Self.id_receptor" FromRole="profesor" ToRole="notificacion" />
+    <NavigationProperty Name="materias" Relationship="Self.materia_profesor" FromRole="profesor" ToRole="materia" />
+  </EntityType>
+  <Association Name="id_acceso">
+    <End Role="acceso" Type="Self.acceso" Multiplicity="1" />
+    <End Role="login" Type="Self.login" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="acceso">
+        <PropertyRef Name="id_acceso" />
+      </Principal>
+      <Dependent Role="login">
+        <PropertyRef Name="id_acceso" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="correo">
+    <End Role="login" Type="Self.login" Multiplicity="1" />
+    <End Role="profesor" Type="Self.profesor" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="login">
+        <PropertyRef Name="correo" />
+      </Principal>
+      <Dependent Role="profesor">
+        <PropertyRef Name="correo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="id_emisor">
+    <End Role="profesor" Type="Self.profesor" Multiplicity="1" />
+    <End Role="notificacion" Type="Self.notificacion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="profesor">
+        <PropertyRef Name="id_empleado" />
+      </Principal>
+      <Dependent Role="notificacion">
+        <PropertyRef Name="id_emisor" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="id_receptor">
+    <End Role="profesor" Type="Self.profesor" Multiplicity="1" />
+    <End Role="notificacion" Type="Self.notificacion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="profesor">
+        <PropertyRef Name="id_empleado" />
+      </Principal>
+      <Dependent Role="notificacion">
+        <PropertyRef Name="id_receptor" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="materia_alumno">
+    <End Role="alumno" Type="Self.alumno" Multiplicity="*" />
+    <End Role="materia" Type="Self.materia" Multiplicity="*" />
+  </Association>
+  <Association Name="materia_profesor">
+    <End Role="profesor" Type="Self.profesor" Multiplicity="*" />
+    <End Role="materia" Type="Self.materia" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="csmEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="accesoes" EntityType="Self.acceso" />
+    <EntitySet Name="alumnoes" EntityType="Self.alumno" />
+    <EntitySet Name="logins" EntityType="Self.login" />
+    <EntitySet Name="materias" EntityType="Self.materia" />
+    <EntitySet Name="notificacions" EntityType="Self.notificacion" />
+    <EntitySet Name="profesors" EntityType="Self.profesor" />
+    <AssociationSet Name="id_acceso" Association="Self.id_acceso">
+      <End Role="acceso" EntitySet="accesoes" />
+      <End Role="login" EntitySet="logins" />
+    </AssociationSet>
+    <AssociationSet Name="correo" Association="Self.correo">
+      <End Role="login" EntitySet="logins" />
+      <End Role="profesor" EntitySet="profesors" />
+    </AssociationSet>
+    <AssociationSet Name="id_emisor" Association="Self.id_emisor">
+      <End Role="profesor" EntitySet="profesors" />
+      <End Role="notificacion" EntitySet="notificacions" />
+    </AssociationSet>
+    <AssociationSet Name="id_receptor" Association="Self.id_receptor">
+      <End Role="profesor" EntitySet="profesors" />
+      <End Role="notificacion" EntitySet="notificacions" />
+    </AssociationSet>
+    <AssociationSet Name="materia_alumno" Association="Self.materia_alumno">
+      <End Role="alumno" EntitySet="alumnoes" />
+      <End Role="materia" EntitySet="materias" />
+    </AssociationSet>
+    <AssociationSet Name="materia_profesor" Association="Self.materia_profesor">
+      <End Role="profesor" EntitySet="profesors" />
+      <End Role="materia" EntitySet="materias" />
+    </AssociationSet>
+    <FunctionImport Name="antiguedad_cliente">
+      <Parameter Name="id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="paginado" ReturnType="Collection(csmModel.paginado_Result)">
+      <Parameter Name="tamano" Mode="In" Type="Int32" />
+      <Parameter Name="numero" Mode="In" Type="Int32" />
+      <Parameter Name="alumno" Mode="In" Type="SByte" />
+    </FunctionImport>
+    <FunctionImport Name="profesor_alumnos" ReturnType="Collection(csmModel.profesor_alumnos_Result)">
+      <Parameter Name="id_profesor" Mode="In" Type="Int32" />
+      <Parameter Name="numero" Mode="In" Type="Int32" />
+      <Parameter Name="tamano" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="buzon" ReturnType="Collection(csmModel.buzon_Result)">
+      <Parameter Name="id" Mode="In" Type="Int32" />
+      <Parameter Name="tamano" Mode="In" Type="Int32" />
+      <Parameter Name="pagina" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="crear_mensaje">
+      <Parameter Name="emisor" Mode="In" Type="Int32" />
+      <Parameter Name="receptor" Mode="In" Type="Int32" />
+      <Parameter Name="mensaje" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="group_students" ReturnType="Collection(csmModel.group_students_Result)">
+      <Parameter Name="id_profesor" Mode="In" Type="Int32" />
+    </FunctionImport>
+  </EntityContainer>
+  <ComplexType Name="paginado_Result" />
+  <ComplexType Name="profesor_alumnos_Result" />
+  <ComplexType Name="buzon_Result" />
+  <ComplexType Name="group_students_Result" />
+</Schema>
